@@ -34,6 +34,7 @@ class AppSettings(BaseSettings):
 
     DATABRICKS_WORKSPACE_URL: Optional[str] = None
     DATABRICKS_TOKEN: Optional[str] = None
+    DATABRICKS_WAREHOUSE_ID: Optional[str] = None
     DATABRICKS_ENV: Optional[str] = "PROD"
 
     def is_postgres_configured(self) -> bool:
