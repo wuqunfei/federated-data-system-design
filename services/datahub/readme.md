@@ -37,4 +37,7 @@ password: datahub
 ## Create Token from DataHub UI
 1. Login to DataHub UI with default credentials. http://localhost:9002/settings/tokens
 4. Click on "Generate Token".
-5. Copy the generated token.
+5. Copy the generated token into .env file.
+```
+DATAHUB_TOKEN=your_generated_token
+```
