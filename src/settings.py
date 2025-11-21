@@ -26,6 +26,11 @@ class AppSettings(BaseSettings):
     KAFKA_SCHEMA_REGISTRY_URL: Optional[str] = None
     KAFKA_PLATFORM_INSTANCE: Optional[str] = None
     KAFKA_ENV: Optional[str] = "PROD"
+    KAFKA_SECURITY_PROTOCOL: Optional[str] = None
+    KAFKA_SASL_MECHANISM: Optional[str] = None
+    KAFKA_SASL_USERNAME: Optional[str] = None
+    KAFKA_SASL_PASSWORD: Optional[str] = None
+    SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO: Optional[str] = None
 
     DATABRICKS_WORKSPACE_URL: Optional[str] = None
     DATABRICKS_TOKEN: Optional[str] = None
@@ -58,4 +63,3 @@ class AppSettings(BaseSettings):
             self.DATABRICKS_WORKSPACE_URL,
             self.DATABRICKS_TOKEN,
         ])
-

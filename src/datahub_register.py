@@ -45,13 +45,32 @@ class DataHubRegistrar:
     def build_kafka_source(self) -> Optional[Dict]:
         if not self.settings.is_kafka_configured():
             return None
+        connection: Dict = {
+            "bootstrap": self.settings.KAFKA_BOOTSTRAP,
+            "schema_registry_url": self.settings.KAFKA_SCHEMA_REGISTRY_URL,
+        }
+        consumer_config: Dict = {}
+        if self.settings.KAFKA_SECURITY_PROTOCOL:
+            consumer_config["security.protocol"] = self.settings.KAFKA_SECURITY_PROTOCOL
+        if self.settings.KAFKA_SASL_MECHANISM:
+            consumer_config["sasl.mechanism"] = self.settings.KAFKA_SASL_MECHANISM
+        if self.settings.KAFKA_SASL_USERNAME:
+            consumer_config["sasl.username"] = self.settings.KAFKA_SASL_USERNAME
+        if self.settings.KAFKA_SASL_PASSWORD:
+            consumer_config["sasl.password"] = self.settings.KAFKA_SASL_PASSWORD
+        if consumer_config:
+            connection["consumer_config"] = consumer_config
+
+        schema_registry_config: Dict = {}
+        if self.settings.SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO:
+            schema_registry_config["basic.auth.user.info"] = self.settings.SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO
+        if schema_registry_config:
+            connection["schema_registry_config"] = schema_registry_config
+
         cfg: Dict = {
             "env": self.settings.KAFKA_ENV,
             "platform_instance": self.settings.KAFKA_PLATFORM_INSTANCE,
-            "connection": {
-                "bootstrap": self.settings.KAFKA_BOOTSTRAP,
-                "schema_registry_url": self.settings.KAFKA_SCHEMA_REGISTRY_URL,
-            },
+            "connection": connection,
         }
         return {"type": "kafka", "config": cfg}
 
