@@ -43,6 +43,17 @@ class AppSettings(BaseSettings):
     KAFKA_SASL_PASSWORD: Optional[str] = None
     SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO: Optional[str] = None
 
+    TRINO_HOST: Optional[str] = "localhost"
+    TRINO_PORT: Optional[int] = 8080
+    TRINO_HTTP_SCHEME: Optional[str] = "http"
+    TRINO_USERNAME: Optional[str] = None
+    TRINO_PASSWORD: Optional[str] = None
+    TRINO_CATALOG_POSTGRES: Optional[str] = "car_insurance"
+    TRINO_CATALOG_SNOWFLAKE: Optional[str] = "house_insurance"
+    TRINO_CATALOG_DATABRICKS: Optional[str] = "travel_insurance"
+    TRINO_SCHEMA_POSTGRES: Optional[str] = None
+    TRINO_SCHEMA_SNOWFLAKE: Optional[str] = None
+    TRINO_SCHEMA_DATABRICKS: Optional[str] = None
 
     def is_postgres_configured(self) -> bool:
         return all([
@@ -70,4 +81,11 @@ class AppSettings(BaseSettings):
         return all([
             self.DATABRICKS_WORKSPACE_URL,
             self.DATABRICKS_TOKEN,
+        ])
+
+    def is_trino_configured(self) -> bool:
+        return all([
+            self.TRINO_HOST,
+            self.TRINO_PORT,
+            self.TRINO_USERNAME,
         ])

@@ -11,4 +11,5 @@ dependencies = [
     "pandas>=2.1.4",
     "pydantic>=2.7",
     "pydantic-settings>=2.2",
+    "trino>=0.321.0",
 ]
