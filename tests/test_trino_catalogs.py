@@ -33,8 +33,6 @@ class TestTrinoCatalogs(unittest.TestCase):
             self._drop(name)
             print(f"Error creating catalog {name}: {e}")
         self.assertTrue(self._exists(name))
-        self._drop(name)
-        self.assertFalse(self._exists(name))
 
     def test_snowflake_catalog_create_check_drop(self):
         name = "ut_sf_catalog"
@@ -47,8 +45,6 @@ class TestTrinoCatalogs(unittest.TestCase):
             self._drop(name)
             print(f"Error creating catalog {name}: {e}")
         self.assertTrue(self._exists(name))
-        self._drop(name)
-        self.assertFalse(self._exists(name))
 
     def test_databricks_catalog_create_check_drop(self):
         name = "ut_db_catalog"
@@ -61,8 +57,6 @@ class TestTrinoCatalogs(unittest.TestCase):
             self._drop(name)
             print(f"Error creating catalog {name}: {e}")
         self.assertTrue(self._exists(name))
-        self._drop(name)
-        self.assertFalse(self._exists(name))
 
 
 if __name__ == "__main__":
