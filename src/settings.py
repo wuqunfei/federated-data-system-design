@@ -13,6 +13,7 @@ class AppSettings(BaseSettings):
     POSTGRES_PASSWORD: Optional[str] = None
     POSTGRES_DATABASE: Optional[str] = None
     POSTGRES_PLATFORM_INSTANCE: Optional[str] = None
+    POSTGRES_SCHEMA: Optional[str] = None
     POSTGRES_ENV: Optional[str] = "PROD"
 
     SNOWFLAKE_ACCOUNT_ID: Optional[str] = None
@@ -24,6 +25,14 @@ class AppSettings(BaseSettings):
     SNOWFLAKE_SCHEMA: Optional[str] = None
     SNOWFLAKE_ENV: Optional[str] = "PROD"
 
+    DATABRICKS_WORKSPACE_URL: Optional[str] = None
+    DATABRICKS_TOKEN: Optional[str] = None
+    DATABRICKS_WAREHOUSE_ID: Optional[str] = None
+    DATABRICKS_SCHEMA: Optional[str] = None
+    DATABRICKS_CATALOG: Optional[str] = None
+    DATABRICKS_ENV: Optional[str] = "PROD"
+    JAVA_HOME: Optional[str] = None
+
     KAFKA_BOOTSTRAP: Optional[str] = None
     KAFKA_SCHEMA_REGISTRY_URL: Optional[str] = None
     KAFKA_PLATFORM_INSTANCE: Optional[str] = None
@@ -34,10 +43,6 @@ class AppSettings(BaseSettings):
     KAFKA_SASL_PASSWORD: Optional[str] = None
     SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO: Optional[str] = None
 
-    DATABRICKS_WORKSPACE_URL: Optional[str] = None
-    DATABRICKS_TOKEN: Optional[str] = None
-    DATABRICKS_WAREHOUSE_ID: Optional[str] = None
-    DATABRICKS_ENV: Optional[str] = "PROD"
 
     def is_postgres_configured(self) -> bool:
         return all([
