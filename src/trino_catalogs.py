@@ -10,7 +10,6 @@ class CatalogPropertiesBuilder:
     def postgres_properties(self, catalog_name: Optional[str] = None) -> Dict[str, str]:
         url = f"jdbc:postgresql://{self.s.POSTGRES_HOST_PORT}/{self.s.POSTGRES_DATABASE}" if self.s.POSTGRES_DATABASE else f"jdbc:postgresql://{self.s.POSTGRES_HOST_PORT}"
         return {
-            "connector.name": "postgresql",
             "connection-url": url,
             "connection-user": self.s.POSTGRES_USERNAME or "",
             "connection-password": self.s.POSTGRES_PASSWORD or "",
@@ -20,15 +19,12 @@ class CatalogPropertiesBuilder:
         account = self.s.SNOWFLAKE_ACCOUNT_ID or ""
         url = f"jdbc:snowflake://{account}.snowflakecomputing.com:443"
         props: Dict[str, str] = {
-            "connector.name": "snowflake",
             "connection-url": url,
             "connection-user": self.s.SNOWFLAKE_USERNAME or "",
             "connection-password": self.s.SNOWFLAKE_PASSWORD or "",
         }
         if self.s.SNOWFLAKE_DATABASE:
             props["snowflake.database"] = self.s.SNOWFLAKE_DATABASE
-        if self.s.SNOWFLAKE_SCHEMA:
-            props["snowflake.schema"] = self.s.SNOWFLAKE_SCHEMA
         if self.s.SNOWFLAKE_WAREHOUSE:
             props["snowflake.warehouse"] = self.s.SNOWFLAKE_WAREHOUSE
         if self.s.SNOWFLAKE_ROLE:
@@ -36,16 +32,19 @@ class CatalogPropertiesBuilder:
         return props
 
     def databricks_iceberg_properties(self, catalog_name: Optional[str] = None) -> Dict[str, str]:
-        uri = f"{self.s.DATABRICKS_WORKSPACE_URL.rstrip('/')}/api/2.1/unity-catalog/"
+        uri = f"{self.s.DATABRICKS_WORKSPACE_URL.rstrip('/')}/api/2.1/unity-catalog/iceberg"
         props: Dict[str, str] = {
-            "connector.name": "iceberg",
             "iceberg.catalog.type": "rest",
             "iceberg.rest-catalog.uri": uri,
+            "iceberg.rest-catalog.security": 'OAUTH2',
+            "iceberg.rest-catalog.vended-credentials-enabled": "true",
+            "fs.native-s3.enabled": "true",
+            "s3.region" : 'us-east-2'
         }
         if self.s.DATABRICKS_TOKEN:
             props["iceberg.rest-catalog.oauth2.token"] = self.s.DATABRICKS_TOKEN
         if self.s.DATABRICKS_CATALOG:
-            props["iceberg.rest-catalog.prefix"] = self.s.DATABRICKS_CATALOG
+            props["iceberg.rest-catalog.warehouse"] = self.s.DATABRICKS_CATALOG
         return props
 
     def to_properties_text(self, props: Dict[str, str]) -> str:
