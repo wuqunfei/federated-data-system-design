@@ -15,3 +15,10 @@ class DatabricksDataSource(DataSource):
             return ""
         # Databricks connection string format for DuckDB databricks_scanner extension
         return f"databricks://token:{self.settings.DATABRICKS_TOKEN}@{self.settings.DATABRICKS_WORKSPACE_URL}"
+
+    def get_connection_setup_commands(self) -> list[str]:
+        """Returns the commands needed to set up the Databricks connection"""
+        if not self.is_configured():
+            return []
+        conn_string = self.get_connection_string()
+        return [f"ATTACH '{conn_string}' AS {self.name} (TYPE databricks, READ_ONLY);"]

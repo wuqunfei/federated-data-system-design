@@ -14,3 +14,10 @@ class PostgresDataSource(DataSource):
         if not self.is_configured():
             return ""
         return f"postgres://{self.settings.POSTGRES_USERNAME}:{self.settings.POSTGRES_PASSWORD}@{self.settings.POSTGRES_HOST_PORT}/{self.settings.POSTGRES_DATABASE}"
+
+    def get_connection_setup_commands(self) -> list[str]:
+        """Returns the commands needed to set up the PostgreSQL connection"""
+        if not self.is_configured():
+            return []
+        conn_string = self.get_connection_string()
+        return [f"ATTACH '{conn_string}' AS {self.name} (TYPE postgres, READ_ONLY);"]

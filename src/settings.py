@@ -20,6 +20,8 @@ class AppSettings(BaseSettings):
     SNOWFLAKE_PASSWORD: Optional[str] = None
     SNOWFLAKE_ROLE: Optional[str] = None
     SNOWFLAKE_WAREHOUSE: Optional[str] = None
+    SNOWFLAKE_DATABASE: Optional[str] = None
+    SNOWFLAKE_SCHEMA: Optional[str] = None
     SNOWFLAKE_ENV: Optional[str] = "PROD"
 
     KAFKA_BOOTSTRAP: Optional[str] = None
