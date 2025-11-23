@@ -22,6 +22,6 @@ class SnowflakeDataSource(DataSource):
         if not self.is_configured():
             return []
         return [
-            f"CREATE SECRET my_snowflake (TYPE snowflake, ACCOUNT '{self.settings.SNOWFLAKE_ACCOUNT_ID}', USER '{self.settings.SNOWFLAKE_USERNAME}', PASSWORD '{self.settings.SNOWFLAKE_PASSWORD}', DATABASE '{self.settings.SNOWFLAKE_DATABASE}', WAREHOUSE  '{self.settings.SNOWFLAKE_WAREHOUSE}', SCHEMA '{self.settings.SNOWFLAKE_SCHEMA}'');",
+            f"CREATE SECRET my_snowflake (TYPE snowflake, ACCOUNT '{self.settings.SNOWFLAKE_ACCOUNT_ID}', USER '{self.settings.SNOWFLAKE_USERNAME}', PASSWORD '{self.settings.SNOWFLAKE_PASSWORD}', DATABASE '{self.settings.SNOWFLAKE_DATABASE}', WAREHOUSE  '{self.settings.SNOWFLAKE_WAREHOUSE}', SCHEMA '{self.settings.SNOWFLAKE_SCHEMA}');",
             f"ATTACH '' AS {self.name} (TYPE snowflake, SECRET my_snowflake, READ_ONLY);"
         ]
