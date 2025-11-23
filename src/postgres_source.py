@@ -10,14 +10,30 @@ class PostgresDataSource(DataSource):
     def is_configured(self) -> bool:
         return self.settings.is_postgres_configured()
 
-    def get_connection_string(self) -> str:
+    def get_spark_read_options(self) -> dict:
         if not self.is_configured():
-            return ""
-        return f"postgres://{self.settings.POSTGRES_USERNAME}:{self.settings.POSTGRES_PASSWORD}@{self.settings.POSTGRES_HOST_PORT}/{self.settings.POSTGRES_DATABASE}"
+            return {}
+        return {
+            "format": "jdbc",
+            "url": f"jdbc:postgresql://{self.settings.POSTGRES_HOST_PORT}/{self.settings.POSTGRES_DATABASE}?currentSchema={self.settings.POSTGRES_SCHEMA}",
+            "user": self.settings.POSTGRES_USERNAME,
+            "password": self.settings.POSTGRES_PASSWORD,
+            "driver": "org.postgresql.Driver"
+        }
 
-    def get_connection_setup_commands(self) -> list[str]:
-        """Returns the commands needed to set up the PostgreSQL connection"""
-        if not self.is_configured():
-            return []
-        conn_string = self.get_connection_string()
-        return [f"ATTACH '{conn_string}' AS {self.name} (TYPE postgres, READ_ONLY);"]
+    def test_connection(self, spark) -> bool:
+        try:
+            options = self.get_spark_read_options()
+            read_options = options.copy()
+            # Use dbtable with a subquery for robust connectivity check
+            read_options['dbtable'] = "(SELECT 1) as t"
+            fmt = read_options.pop('format', None)
+            reader = spark.read.options(**read_options)
+            if fmt:
+                reader = reader.format(fmt)
+            reader.load().collect()
+            return True
+        except Exception as e:
+            import sys
+            print(f"Connection test failed for {self.name}: {e}", file=sys.stderr)
+            return False

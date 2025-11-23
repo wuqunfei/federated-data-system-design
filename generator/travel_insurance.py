@@ -276,9 +276,14 @@ class DatabricksLoader:
 
         for record in records:
             for col, val in record.items():
-                if isinstance(val, (datetime.datetime, pd.Timestamp)):
-                    if getattr(val, 'tzinfo', None) is not None:
-                        record[col] = val.tz_convert(None).to_pydatetime()
+                if isinstance(val, pd.Timestamp):
+                    if val.tz is not None:
+                        record[col] = val.tz_localize(None).to_pydatetime()
+                    else:
+                        record[col] = val.to_pydatetime()
+                elif isinstance(val, datetime.datetime):
+                    if val.tzinfo is not None:
+                        record[col] = val.astimezone(datetime.timezone.utc).replace(tzinfo=None)
                 elif isinstance(val, datetime.date):
                     record[col] = val.strftime('%Y-%m-%d')
 

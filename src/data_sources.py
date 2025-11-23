@@ -1,17 +1,18 @@
-from abc import ABC, abstractmethod
+from typing import Dict
 
-class DataSource(ABC):
+
+class DataSource:
     def __init__(self, settings):
         self.settings = settings
+        self.type = ""
+        self.name = ""
 
-    @abstractmethod
     def is_configured(self) -> bool:
-        pass
+        return False
 
-    @abstractmethod
-    def get_connection_string(self) -> str:
-        pass
+    def get_spark_read_options(self) -> Dict:
+        return {}
 
-    def get_connection_setup_commands(self) -> list[str]:
-        """Returns the commands needed to set up the connection - default implementation returns empty list"""
-        return []
+    def test_connection(self, spark) -> bool:
+        return False
+

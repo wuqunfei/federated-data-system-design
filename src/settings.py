@@ -13,6 +13,7 @@ class AppSettings(BaseSettings):
     POSTGRES_PASSWORD: Optional[str] = None
     POSTGRES_DATABASE: Optional[str] = None
     POSTGRES_PLATFORM_INSTANCE: Optional[str] = None
+    POSTGRES_SCHEMA: Optional[str] = None
     POSTGRES_ENV: Optional[str] = "PROD"
 
     SNOWFLAKE_ACCOUNT_ID: Optional[str] = None
@@ -37,7 +38,10 @@ class AppSettings(BaseSettings):
     DATABRICKS_WORKSPACE_URL: Optional[str] = None
     DATABRICKS_TOKEN: Optional[str] = None
     DATABRICKS_WAREHOUSE_ID: Optional[str] = None
+    DATABRICKS_SCHEMA: Optional[str] = None
+    DATABRICKS_CATALOG: Optional[str] = None
     DATABRICKS_ENV: Optional[str] = "PROD"
+    JAVA_HOME: Optional[str] = None
 
     def is_postgres_configured(self) -> bool:
         return all([
