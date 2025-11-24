@@ -12,8 +12,17 @@ class AppSettings(BaseSettings):
     POSTGRES_USERNAME: Optional[str] = None
     POSTGRES_PASSWORD: Optional[str] = None
     POSTGRES_DATABASE: Optional[str] = None
+    POSTGRES_SCHEMA: Optional[str] = None
     POSTGRES_PLATFORM_INSTANCE: Optional[str] = None
     POSTGRES_ENV: Optional[str] = "PROD"
+
+    MYSQL_HOST: Optional[str] = None
+    MYSQL_PORT: Optional[int] = None
+    MYSQL_USERNAME: Optional[str] = None
+    MYSQL_PASSWORD: Optional[str] = None
+    MYSQL_DATABASE: Optional[str] = None
+    MYSQL_SCHEMA: Optional[str] = None
+    MYSQL_ENV: Optional[str] = "PROD"
 
     SNOWFLAKE_ACCOUNT_ID: Optional[str] = None
     SNOWFLAKE_USERNAME: Optional[str] = None
@@ -37,6 +46,7 @@ class AppSettings(BaseSettings):
     DATABRICKS_WORKSPACE_URL: Optional[str] = None
     DATABRICKS_TOKEN: Optional[str] = None
     DATABRICKS_WAREHOUSE_ID: Optional[str] = None
+    DATABRICKS_SCHEMA: Optional[str] = None
     DATABRICKS_ENV: Optional[str] = "PROD"
 
     def is_postgres_configured(self) -> bool:
@@ -59,6 +69,14 @@ class AppSettings(BaseSettings):
         return all([
             self.KAFKA_BOOTSTRAP,
             self.KAFKA_SCHEMA_REGISTRY_URL,
+        ])
+
+    def is_mysql_configured(self) -> bool:
+        return all([
+            self.MYSQL_HOST,
+            self.MYSQL_PORT,
+            self.MYSQL_USERNAME,
+            self.MYSQL_PASSWORD,
         ])
 
     def is_databricks_configured(self) -> bool:
