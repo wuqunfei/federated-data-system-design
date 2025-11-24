@@ -6,7 +6,7 @@
 
 -- 1. DATABASE SETUP
 -- ---------------------------------------------------------
-CREATE DATABASE IF NOT EXISTS travel_insurance;
+# CREATE DATABASE IF NOT EXISTS travel_insurance;
 USE travel_insurance;
 
 

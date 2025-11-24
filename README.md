@@ -88,3 +88,7 @@ The solution produces a unified customer view that includes:
 - Policy status and coverage details
 
 This enables insurance companies to have a complete view of their customers across all product lines, supporting better risk assessment, cross-selling opportunities, and customer service.
+
+
+## Instructions to Run Locally for snowflake client
+https://github.com/iqea-ai/duckdb-snowflake
