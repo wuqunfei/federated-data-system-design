@@ -58,6 +58,28 @@ class TestTrinoCatalogs(unittest.TestCase):
             print(f"Error creating catalog {name}: {e}")
         self.assertTrue(self._exists(name))
 
+    def test_kafka_catalog_create_check_drop(self):
+        name = "ut_kafka_catalog"
+        self._drop(name)
+        # Mock settings for Kafka if not present in env, or rely on what's there.
+        # Ideally we should check if kafka is configured before running this, similar to other tests.
+        # For now assuming if trino is configured we might want to try or skip if specific kafka settings missing.
+        if not self.settings.is_kafka_configured():
+             print("Skipping Kafka test as Kafka is not configured")
+             return
+
+        props = self.builder.kafka_properties()
+        sql = self.builder.create_catalog_sql(name, props, "kafka")
+        try:
+            self.client.execute(sql)
+        except Exception as e:
+            self._drop(name)
+            print(f"Error creating catalog {name}: {e}")
+            # If it fails, we might still want to assert it exists if the failure was harmless, but likely it failed.
+            # For this test let's fail if exception.
+            self.fail(f"Failed to create kafka catalog: {e}")
+        self.assertTrue(self._exists(name))
+
 
 if __name__ == "__main__":
     unittest.main()

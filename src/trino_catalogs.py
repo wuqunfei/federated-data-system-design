@@ -47,6 +47,21 @@ class CatalogPropertiesBuilder:
             props["iceberg.rest-catalog.warehouse"] = self.s.DATABRICKS_CATALOG
         return props
 
+    def kafka_properties(self, catalog_name: Optional[str] = None) -> Dict[str, str]:
+        props = {
+            "connector.name": "kafka",
+            "kafka.nodes": self.s.KAFKA_BOOTSTRAP,
+            "kafka.table-names": "customers,healthy",
+            "kafka.confluent-schema-registry-url": self.s.KAFKA_SCHEMA_REGISTRY_URL,
+        }
+        if self.s.KAFKA_SECURITY_PROTOCOL:
+            props["kafka.security-protocol"] = self.s.KAFKA_SECURITY_PROTOCOL
+        if self.s.KAFKA_SASL_MECHANISM:
+            props["kafka.sasl.mechanism"] = self.s.KAFKA_SASL_MECHANISM
+        if self.s.KAFKA_SASL_USERNAME and self.s.KAFKA_SASL_PASSWORD:
+            props["kafka.sasl.jaas.config"] = f"org.apache.kafka.common.security.plain.PlainLoginModule required username=\"{self.s.KAFKA_SASL_USERNAME}\" password=\"{self.s.KAFKA_SASL_PASSWORD}\";"
+        return props
+
     def to_properties_text(self, props: Dict[str, str]) -> str:
         return "\n".join([f"{k}={v}" for k, v in props.items()]) + "\n"
 
