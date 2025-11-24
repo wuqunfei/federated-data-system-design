@@ -5,6 +5,8 @@ import pandas as pd
 
 from src.data_sources import DataSource
 from src.postgres_source import PostgresDataSource
+from src.snowflake_source import SnowflakeDataSource
+from src.mysql_source import MySQLDataSource
 from src.settings import AppSettings
 
 logger = logging.getLogger(__name__)
@@ -21,22 +23,15 @@ class Customer360View:
             self.data_sources.append(postgres_source)
 
         # Add Snowflake source for house insurance
-        try:
-            from src.snowflake_source import SnowflakeDataSource
-            snowflake_source = SnowflakeDataSource(self.settings)
-            if snowflake_source.is_configured():
-                self.data_sources.append(snowflake_source)
-        except ImportError:
-            pass  # Snowflake source not available
+        snowflake_source = SnowflakeDataSource(self.settings)
+        if snowflake_source.is_configured():
+            self.data_sources.append(snowflake_source)
 
-        # Add Databricks source for travel insurance
-        try:
-            from src.databricks_source import DatabricksDataSource
-            databricks_source = DatabricksDataSource(self.settings)
-            if databricks_source.is_configured():
-                self.data_sources.append(databricks_source)
-        except ImportError:
-            pass  # Databricks source not available
+        # Add MySQL source for car insurance
+        mysql_source = MySQLDataSource(self.settings)
+        if mysql_source.is_configured():
+            self.data_sources.append(mysql_source)
+
 
     def add_data_source(self, data_source: DataSource):
         if data_source.is_configured():
@@ -56,6 +51,9 @@ class Customer360View:
             if any(ds.type == 'databricks' for ds in self.data_sources):
                 self.con.execute("INSTALL delta;")
                 self.con.execute("LOAD delta;")
+            if any(ds.type == 'mysql' for ds in self.data_sources):
+                self.con.execute("INSTALL mysql;")
+                self.con.execute("LOAD mysql;")
 
             logger.info("Successfully loaded extensions for federated queries")
         except Exception as e:
