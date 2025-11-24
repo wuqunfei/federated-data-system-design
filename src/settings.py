@@ -16,6 +16,14 @@ class AppSettings(BaseSettings):
     POSTGRES_SCHEMA: Optional[str] = None
     POSTGRES_ENV: Optional[str] = "PROD"
 
+    MYSQL_HOST: Optional[str] = None
+    MYSQL_PORT: Optional[int] = None
+    MYSQL_USERNAME: Optional[str] = None
+    MYSQL_PASSWORD: Optional[str] = None
+    MYSQL_DATABASE: Optional[str] = None
+    MYSQL_SCHEMA: Optional[str] = None
+    MYSQL_ENV: Optional[str] = "PROD"
+
     SNOWFLAKE_ACCOUNT_ID: Optional[str] = None
     SNOWFLAKE_USERNAME: Optional[str] = None
     SNOWFLAKE_PASSWORD: Optional[str] = None
@@ -24,6 +32,8 @@ class AppSettings(BaseSettings):
     SNOWFLAKE_DATABASE: Optional[str] = None
     SNOWFLAKE_SCHEMA: Optional[str] = None
     SNOWFLAKE_ENV: Optional[str] = "PROD"
+
+    
 
     DATABRICKS_WORKSPACE_URL: Optional[str] = None
     DATABRICKS_TOKEN: Optional[str] = None
@@ -61,6 +71,15 @@ class AppSettings(BaseSettings):
             self.POSTGRES_USERNAME,
             self.POSTGRES_PASSWORD,
         ])
+
+    def is_mysql_configured(self) -> bool:
+        return all([
+            self.MYSQL_HOST,
+            self.MYSQL_PORT,
+            self.MYSQL_USERNAME,
+            self.MYSQL_PASSWORD,
+        ])
+
 
     def is_snowflake_configured(self) -> bool:
         return all([
